@@ -1,0 +1,55 @@
+<html>
+<head>
+<link rel="shortcut icon" type="image/png" href="jasmine/lib/jasmine/jasmine_favicon.png">
+<link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine/jasmine.css">
+
+<script type="text/javascript" src="jasmine/lib/jasmine/jasmine.js"></script>
+<script type="text/javascript" src="jasmine/lib/jasmine/jasmine-html.js"></script>
+<script type="text/javascript" src="jasmine/lib/jasmine/boot.js"></script>
+<script type="text/javascript" src="app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+<script type="text/javascript" src="../js/feedbackWidget.js" ></script>
+<script type="text/javascript" src="../js/game.js" ></script>
+
+</head>
+<body>
+
+  <div id="feedback-success" class="alert alert-success" role="alert">
+    <p>Veel succes met deze module!</p>
+  </div>
+
+  <script>
+    beforeAll((done) => {
+      $(done);
+    });
+
+    describe("Feedback widget gets hidden", () => {
+      let id = 'feedback-success';
+      let feedbackElement = new FeedbackWidget(id);
+
+      it("Element found", () => {
+        expect($(`#${id}`)).toBeDefined()
+      });
+      it("Display none after hide", () => {
+        feedbackElement.hide();
+        expect($(`#${id}`).css('display')).toBe('none');
+      }); 
+    });
+
+    describe('Game element tests', () => {
+      it("Game Init function found", () => {
+        expect(Game.init).toBeDefined();
+      });
+      it("Data init function found", () => {
+        expect(Game.Data.init).toBeDefined();
+      });
+      it("Model init function found", () => {
+        expect(Game.Model.init).toBeDefined();
+      });
+    })
+    
+  </script>
+
+
+</body>
+</html>
