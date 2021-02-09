@@ -19,6 +19,10 @@ class FeedbackWidget{
   log(message) {
     let logs = JSON.parse(localStorage.getItem('feedback_widget')) ?? [];
     logs.push(message);
+
+    if (logs.length > 10)
+      logs.splice(0,1);
+
     localStorage.setItem('feedback_widget', JSON.stringify(logs));
 
     this.show(message.message, message.type);
