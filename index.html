@@ -39,31 +39,7 @@
 $(() => {  
   let feedbackWidget = new FeedbackWidget('feedback-success');
 
-  const getWeatherData = () => {
-    const apiKey = "3bedf08fa201acca2754e7fdbc6894f8";
-    const url = "http://api.openweathermap.org/data/2.5/weather?q=zwolle&apikey=" + apiKey;
-
-    return $.get(url);
-  }
-
-  getWeatherData().then((res) => {
-    feedbackWidget.log({
-      'message': JSON.stringify(res),
-      'type': 'success'
-    });
-  })
-
-  getWeatherData().then(d => {
-    return {
-      data: d,
-      meta: 'vanuit eerste schakel van de chain'
-    }
-  }).then(r => {
-    console.log(`Bericht ontvangen in tweede schakel: ${r.meta}`);
-    throw new Error('Error gegooid');
-  }).catch(e => {
-    console.log(`Error opgevangen, error bericht: ${e.message}`);
-  });
+  Game.Model.getWeather().then(x => console.log(x));
 
 });
 
@@ -72,3 +48,4 @@ $(() => {
 
 </body>
 </html>
+
