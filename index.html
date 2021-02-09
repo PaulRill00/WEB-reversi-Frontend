@@ -23,24 +23,14 @@
 </head>
 <body>
 
-<div id="feedback">
-</div>
-
-<div id="feedback-success" class="alert alert-success" role="alert" style="display:none">
-  <p>Veel succes met deze module!</p>
-</div>
-
-<div id="feedback-danger" class="alert alert-danger" role="alert" style="display:none">
-  <p>Pas op voor loslopende bits.</p>
-</div>
+<div id="feedback"></div>
 
 <script>
 
 $(() => {  
-  let feedbackWidget = new FeedbackWidget('feedback-success');
+  let feedbackWidget = new FeedbackWidget('feedback');
 
-  Game.Model.getWeather().then(x => console.log(x));
-
+  Game.init();
 });
 
 
