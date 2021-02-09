@@ -34,27 +34,37 @@
   <p>Pas op voor loslopende bits.</p>
 </div>
 
-<button class="button">click me</button>
-
 <script>
-function toggleFeedback(elementId) {
-  var x = document.getElementById(elementId);
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
+
+$(() => {  
+  let feedbackWidget = new FeedbackWidget('feedback-success');
+
+  const getWeatherData = () => {
+    const apiKey = "3bedf08fa201acca2754e7fdbc6894f8";
+    const url = "http://api.openweathermap.org/data/2.5/weather?q=zwolle&apikey=" + apiKey;
+
+    return $.get(url);
   }
-}
 
-$(() => {
-  let feedbackWidget = new FeedbackWidget('feedback');
-
-  $('.button').on('click', () => {
+  getWeatherData().then((res) => {
     feedbackWidget.log({
-      'message': 'Bijna klaar, tijd voor koffie',
+      'message': JSON.stringify(res),
       'type': 'success'
-    })
+    });
+  })
+
+  getWeatherData().then(d => {
+    return {
+      data: d,
+      meta: 'vanuit eerste schakel van de chain'
+    }
+  }).then(r => {
+    console.log(`Bericht ontvangen in tweede schakel: ${r.meta}`);
+    throw new Error('Error gegooid');
+  }).catch(e => {
+    console.log(`Error opgevangen, error bericht: ${e.message}`);
   });
+
 });
 
 

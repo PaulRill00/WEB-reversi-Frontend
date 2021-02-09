@@ -4,8 +4,9 @@ const Game = ((url) => {
     apiUrl: url,
   };
 
-  const privateInit = () => {
+  const privateInit = (callback) => {
     console.log(configMap.apiUrl);
+    callback();
   }
 
   return {
