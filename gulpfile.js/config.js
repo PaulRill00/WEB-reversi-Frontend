@@ -4,7 +4,7 @@ const config = {
     variables: {
         'src': './src',
         'dist': './dist',
-        'deploy': './deploy',
+        'deploy': '..\\Backend\\ReversiRestAPI\\wwwroot',
     },
     browserSync: {
         'watch': true,
@@ -43,15 +43,24 @@ const config = {
             '{src}/js/**/*.js',
             '{src}/js/**/_*.js'
         ],
-        'to': '{dist}/assets/js',
+        'to': {
+            'dist': '{dist}/assets/js',
+            'deploy': '{deploy}/assets/js',
+        },
     },
     css: {
         'from': '{src}/css/**/*.{sass,scss,css}',
-        'to': '{dist}/assets/css',
+        'to': {
+            'dist': '{dist}/assets/css',
+            'deploy': '{deploy}/assets/css',
+        },
     },
     html: {
         'from': '{src}/html/**/*.html',
-        'to': '{dist}',
+        'to': {
+            'dist': '{dist}',
+            'deploy': '{deploy}',
+        },
     },
     tests: {
         'from': '{src}/test/**/*.*',

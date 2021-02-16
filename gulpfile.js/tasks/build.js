@@ -5,7 +5,8 @@ const config = require('../config').getConfig();
 
 const html = () => {
   return src(config.html.from)
-    .pipe(dest(config.html.to));
+    .pipe(dest(config.html.to.dist))
+    .pipe(dest(config.html.to.deploy));
 }
 
 const css = () => {
@@ -13,13 +14,15 @@ const css = () => {
     .pipe($.sass())
     .pipe($.minifyCss())
     .pipe($.autoprefixer())
-    .pipe(dest(config.css.to));
+    .pipe(dest(config.css.to.dist))
+    .pipe(dest(config.css.to.deploy));
 }
 
 const js = () => {
   return src(config.js.from)
     .pipe($.concat('app.js'))
-    .pipe(dest(config.js.to));
+    .pipe(dest(config.js.to.dist))
+    .pipe(dest(config.js.to.deploy));
 }
 
 const tests = () => {
