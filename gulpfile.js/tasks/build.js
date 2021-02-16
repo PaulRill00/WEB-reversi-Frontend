@@ -20,6 +20,7 @@ const css = () => {
 
 const js = () => {
   return src(config.js.from)
+    .pipe($.order(config.js.order, { base: config.variables.src}))
     .pipe($.concat('app.js'))
     .pipe(dest(config.js.to.dist))
     .pipe(dest(config.js.to.deploy));

@@ -41,7 +41,10 @@ const config = {
     js: {
         'from': [
             '{src}/js/**/*.js',
-            '{src}/js/**/_*.js'
+        ],
+        'order': [
+            'js/Game/Game.js',
+            'js/**/*.js',
         ],
         'to': {
             'dist': '{dist}/assets/js',
