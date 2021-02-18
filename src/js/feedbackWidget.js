@@ -2,18 +2,45 @@ class FeedbackWidget{
   constructor(elementId) {
     this._elementId = elementId;
     this.$element = $(`#${this._elementId}`);
+    this.$element.empty();
+
+    this.$element.append(`
+      <div class="feedbackWidget">
+        <div class="feedbackWidget__icon">
+          <i class="fas fa-check"></i>
+        </div>
+
+        <p class="feedbackWidget__message">
+          message
+        </p>
+
+        <div class="feedbackWidget__close">
+          <i class="fas fa-times"></i>
+        </div>
+    
+        <div class="feedbackWidget__buttons">
+          <button class="feedbackWidget__button button__success">
+            Agree
+          </button>
+
+          <button class="feedbackWidget__button button__cancel">
+            Disapprove
+          </button>
+        </div>
+      <div>
+    `);
   }
 
   show(message, type){
-    this.$element.text(message);
-    this.$element.addClass(`alert`);
-    this.$element.addClass(`alert-${type}`);
-    this.$element.attr('role','alert');
-    this.$element.css("display", "block");
+    this.$element.addClass(`type-${type}`);
+
+    this.$element.find('.feedbackWidget').addClass("active");
+
+    this.$element.find('.feedbackWidget__message').html(message);
   }
 
   hide(){
-    this.$element.css("display", "none");
+    this.$element.find('.feedbackWidget').removeClass("active");
   }
 
   log(message) {

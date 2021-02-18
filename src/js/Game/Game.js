@@ -4,15 +4,21 @@ const Game = ((url) => {
     apiUrl: url,
   };
 
-  const privateInit = () => {
-    
-    setInterval(() => {
-      _getCurrentGameState()
-    }, 2000);
+  let stateMap = {
+
+  }
+
+  const privateInit = (gameToken) => {
+    stateMap.currentGameToken = gameToken;
+
+    Game.Board.init('board');
+    Game.Model.getGameState('test');
+
+    setInterval(() => _getCurrentGameState(), 2000);
   }
 
   const _getCurrentGameState = () => {
-    Game.Model.getGameState();
+    Game.Model.getGameState(stateMap.currentGameToken);
   }
 
   return {
