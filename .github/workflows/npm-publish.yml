@@ -29,7 +29,7 @@ jobs:
       - name: Build Latest Image
         run: docker build -f Dockerfile.latest -t paulrill/reversi:latest .
       - name: Push Backend image
-        run: docker push paulrill/reversi:backend
+        run: docker push paulrill/reversi:frontend
       - name: Push Latest image
         run: docker push paulrill/reversi:latest
       - name: Restart Docker Container
