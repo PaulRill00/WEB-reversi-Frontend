@@ -35,3 +35,4 @@ jobs:
       - name: Restart Docker Container
         env:
           PORTAINER_URL: ${{ secrets.PORTAINER_URL }}
+        run: curl --location --request POST $PORTAINER_URL
