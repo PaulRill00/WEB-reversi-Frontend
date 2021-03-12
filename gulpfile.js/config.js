@@ -4,7 +4,7 @@ const config = {
     variables: {
         'src': './src',
         'dist': './dist',
-        'deploy': '..\\Backend\\ReversiRestAPI\\wwwroot',
+        'deploy': 'D:/Users/Paul Rill/Source/Repos/Reversi/Backend/ReversiMvcApp/wwwroot',
     },
     browserSync: {
         'watch': true,

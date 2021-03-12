@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/PaulRill00/WEB-reversi-Frontend#readme",
   "devDependencies": {
-    "@babel/core": "^7.12.16",
+    "@babel/core": "^7.13.10",
     "browser-sync": "^2.26.14",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
@@ -38,9 +38,12 @@
     "string-template": "^1.0.0"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.13.10",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "gulp-eslint": "^6.0.0",
+    "gulp-if": "^3.0.0",
     "gulp-sass-lint": "^1.4.0",
+    "gulp-uglifyjs": "^0.6.2",
     "jquery": "^3.5.1"
   }
 }

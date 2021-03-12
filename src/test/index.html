@@ -9,13 +9,11 @@
 <script type="text/javascript" src="app.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 <script type="text/javascript" src="../assets/js/app.js" ></script>
+<link rel="stylesheet" href="../assets/css/style.css">
 
 </head>
 <body>
-
-  <div id="feedback-success" class="alert alert-success" role="alert">
-    <p>Veel succes met deze module!</p>
-  </div>
+  <div id="feedback"></div>
 
   <script>
     beforeAll((done) => {
@@ -23,15 +21,15 @@
     });
  
     describe("Feedback widget gets hidden", () => {
-      let id = 'feedback-success';
+      let id = 'feedback';
       let feedbackElement = new FeedbackWidget(id);
 
       it("Element found", () => {
         expect($(`#${id}`)).toBeDefined()
       });
       it("Display none after hide", () => {
-        feedbackElement.hide();
-        expect($(`#${id}`).css('display')).toBe('none');
+        feedbackElement.show();
+        expect($(`#${id}`).css('opacity')).toBe('1');
       }); 
     });
 
