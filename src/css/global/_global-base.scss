@@ -4,3 +4,9 @@
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
 }
+
+#board {
+  display: inline-block;
+  width: 100%;
+  height: fit-content;
+}

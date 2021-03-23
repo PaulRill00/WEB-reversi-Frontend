@@ -1,0 +1,33 @@
+.game-actions {
+  float: right;
+  background-color: $grey;
+  display: flex;
+  width: 12rem;
+  height: 24rem;
+  padding: 2rem;
+  justify-items: flex-start;
+  flex-direction: column;
+  text-align: center;
+
+  .game-button {
+    border: 0;
+    outline: 0;
+    padding: .5rem .4rem;
+    display: block;
+    background-color: white;
+    box-shadow: 2px 3px rgba(black, .4);
+    margin-top: .5rem;
+    transition: box-shadow .2s;
+    cursor: pointer;
+
+    &.hidden {
+      display: none;
+    }
+
+    &:hover {
+      box-shadow: 0px 1px rgba(black, .4);
+    }
+
+  }
+
+}

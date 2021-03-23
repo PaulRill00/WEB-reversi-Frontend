@@ -51,6 +51,29 @@ const config = {
             'deploy': '{deploy}/assets/js',
         },
     },
+    vendor: {
+        'from': [
+            '{src}/js/vendor/**/*.js',
+        ],
+        'to': {
+            'dist': '{dist}/assets/js',
+            'deploy': '{deploy}/assets/js',
+        },
+    },
+    handlebars: {
+        'from': [
+            '{src}/templates/**/[^_]*.hbs',
+        ],
+        'to': {
+            'dist': '{dist}/assets/js',
+            'deploy': '{deploy}/assets/js',
+        },
+    },
+    partials: {
+        'from': [
+            '{src}/templates/**/_*.hbs',
+        ],
+    },
     css: {
         'from': '{src}/css/**/*.{sass,scss,css}',
         'to': {
@@ -88,6 +111,10 @@ const config = {
         { 
             'task': 'tests',
             'from': '{src}/test/**/*.*',
+        },
+        { 
+            'task': 'handlebars',
+            'from': '{src}/templates/**/*.hbs',
         }
     ],
 };

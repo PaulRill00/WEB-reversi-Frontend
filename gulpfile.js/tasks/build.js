@@ -1,15 +1,15 @@
 const { src, dest, parallel } = require('gulp');
 const $ = require('gulp-load-plugins')();
-var gulpif = require('gulp-if');
+const merge = require('merge-stream');
+const path = require('path');
 
 const config = require('../config').getConfig();
 
-const compileToDeploy = false;
+const compileToDeploy = true;
 
 const html = () => {
   return src(config.html.from)
     .pipe(dest(config.html.to.dist))
-    .pipe(gulpif(compileToDeploy, dest(config.html.to.deploy)));
 }
 
 const css = () => {
@@ -19,7 +19,7 @@ const css = () => {
     .pipe($.autoprefixer())
     .pipe($.plumber())
     .pipe(dest(config.css.to.dist))
-    .pipe(gulpif(compileToDeploy, dest(config.css.to.deploy)));
+    .pipe($.if(compileToDeploy, dest(config.css.to.deploy)));
 }
 
 const js = () => {
@@ -31,7 +31,42 @@ const js = () => {
     // }))
     // .pipe($.uglifyjs({compress: true}))
     .pipe(dest(config.js.to.dist))
-    .pipe(gulpif(compileToDeploy, dest(config.js.to.deploy)));
+    .pipe($.if(compileToDeploy, dest(config.js.to.deploy)));
+}
+
+const vendor = () => {
+  return src(config.vendor.from)
+    .pipe($.concat('vendor.js'))
+    .pipe(dest(config.vendor.to.dist))
+    .pipe($.if(compileToDeploy, dest(config.vendor.to.deploy)));
+}
+
+const handlebars = () => {
+  const templates = src(config.handlebars.from)
+    .pipe($.handlebars())
+    .pipe($.wrap('Handlebars.template(<%= contents %>)'))
+    .pipe($.declare({
+      namespace: 'spa_reversi',
+      noRedeclare: true,
+      processName: function(filePath) {
+        return $.declare.processNameByPath(filePath.replace('<parent_map>/templates/', ''));
+      }
+    }));
+
+  const partials = src(config.partials.from)
+    .pipe($.handlebars())
+    .pipe($.wrap('Handlebars.registerPartial(<%= processPartialName(file.relative) %>, Handlebars.template(<%= contents %>));', {}, {
+        imports: {
+            processPartialName: function (fileName) {
+                return JSON.stringify(path.basename(fileName, '.js').substr(1));
+            }
+        }
+    }));
+
+    return merge(partials, templates)
+      .pipe($.concat('templates.js'))
+      .pipe(dest(config.handlebars.to.dist))
+      .pipe($.if(compileToDeploy, dest(config.handlebars.to.deploy)));
 }
 
 const webfonts = () => {
@@ -48,4 +83,4 @@ exports.html = html;
 exports.css = css;
 exports.js = js;
 exports.tests = tests;
-exports.build = parallel(html, css, js, webfonts, tests);
+exports.build = parallel(html, css, js, vendor, handlebars, webfonts, tests);

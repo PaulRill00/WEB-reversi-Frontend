@@ -1,5 +1,6 @@
 .board {
   display: grid;
+  float: left;
   // grid-template-rows and grid-template-columns will be set in _Game.Board.js
 
   .cell {
@@ -30,12 +31,12 @@
         margin: .2rem 0 0 0;
       }
 
-      &[data-color="white"], &[data-color="black"] {
+      &[data-color="1"], &[data-color="2"] {
         opacity: 1;
         cursor: default;
       }
 
-      &[data-color="white"] {
+      &[data-color="1"] {
         &::after {
           background-color: white;
         }
@@ -43,7 +44,7 @@
           background-color: black;
         }
       }
-      &[data-color="black"] {
+      &[data-color="2"] {
         opacity: 1;
         &::after {
           background-color: black;

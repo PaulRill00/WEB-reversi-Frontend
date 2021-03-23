@@ -1,29 +1,34 @@
-const Game = ((url) => {
+const Game = (() => {
   
   let configMap = {
-    apiUrl: url,
   };
 
   let stateMap = {
-
+  
   }
 
-  const privateInit = (gameToken) => {
+  const privateInit = (baseApiUrl, gameToken, playerToken) => {
     stateMap.currentGameToken = gameToken;
+    stateMap.player = playerToken;
 
-    Game.Board.init('board');
-    Game.Model.getGameState('test');
-
-    setInterval(() => _getCurrentGameState(), 2000);
+    Game.Data.init('production', baseApiUrl);
+    Game.Board.init('board', gameToken);
+    Game.Model.getGameState(gameToken);
   }
 
   const _getCurrentGameState = () => {
     Game.Model.getGameState(stateMap.currentGameToken);
   }
 
-  return {
-    init: privateInit
+  const _getPlayer = () => {
+    return stateMap.player;
   }
 
-})('/api/url');
+  return {
+    init: privateInit,
+    update: _getCurrentGameState,
+    player: _getPlayer,
+  }
+
+})();
 

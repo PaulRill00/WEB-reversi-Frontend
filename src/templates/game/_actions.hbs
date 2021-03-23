@@ -1,0 +1,8 @@
+<div class="game-actions">
+  <h4>Game actions</h4>
+
+  {{#each actions }}
+    <button id="{{this.Action}}-button" data-button-action="{{this.Action}}" class="game-button" onclick="Game.Board.performAction($(this).attr('data-button-action'))">{{this.Label}}</button>
+  {{/each}}
+  
+</div>

@@ -5,39 +5,27 @@ Game.Board = (() => {
   };
 
   let stateMap = {
-    moving: 1,
-    board: []
+    gameToken: undefined,
+    game: {
+      board: [],
+      actions: [],
+      moving: 1,
+    }
   };
 
   /**
    * Render the board
    */
   const displayBoard = () => {
-    $tempBoard = $(`<div class="board" style="
-      grid-template-columns: repeat(${configMap.boardSize}, 4rem); 
-      grid-template-rows:    repeat(${configMap.boardSize}, 4rem);
-    "></div><h1 id="moving_player"></h1>`);
-
-    for (let row = 0; row < configMap.boardSize; row++) {
-      for (let col = 0; col < configMap.boardSize; col++) {
-        $cell = $(`<div class="cell" data-row="${row}" data-col="${col}"><div class="chip" data-color=""></div>`);
-
-        $cell.on('click', function () {
-          _placeChip($(this).attr('data-row'), $(this).attr('data-col'));
-        })
-
-        $tempBoard.append($cell);
-      }
-    }
-
-    stateMap.$board.append($tempBoard);
+    _updateBoard();    
   }
 
   /**
    * Initialize the component
    */
-  const _init = (boardParentId) => {
+  const _init = (boardParentId, gameToken) => {
     stateMap.$board = $(`#${boardParentId}`);
+    stateMap.gameToken = gameToken;
     displayBoard();
   }
 
@@ -48,20 +36,21 @@ Game.Board = (() => {
    * @param {int} col 
    */
   const _placeChip = async (row, col) => {
-    let $field = _getField(row, col);
-
-    // let hasMoved = true;
-    // hasMoved = $field.find('.chip').attr('data-color') === '';
-
-    let result = await Game.Data.put('api/game/test/move', {
-      row: row,
-      col: col,
-      player: stateMap.moving,
-    }).then(res => res).catch(e => false);
+    let result = await Game.Data.put(`game/${stateMap.gameToken}/move`, {
+      rowmove: parseInt(row),
+      colmove: parseInt(col),
+      player: Game.player(),
+    }).then(res => res).catch(e => false).catch(err => {
+      console.log(err);
+      return false;
+    });
 
     if(result) {
       _update(result);
       _updateBoard();
+
+      // Trigger event when move is succesfull
+      stateMap.$board.trigger('boardUpdate');
     }
   }
 
@@ -69,51 +58,45 @@ Game.Board = (() => {
    * Update the board from the stateMap.board
    */
   const _updateBoard = () => {
-    for (let row = 0; row < configMap.boardSize; row++) {
-      for (let col = 0; col < configMap.boardSize; col++) {
-        let color = '';
-        switch(stateMap.board[row][col]) {
-          case 1: 
-            color = 'white'
-            break;
-          case 2: 
-            color = 'black'
-            break;
-        }
+    stateMap.$board.html(Game.Template.parseTemplate('game.game', {
+      'game': stateMap.game,
+      'size': configMap.boardSize,
+      'isMoving': Game.player() === stateMap.game.movingPlayer,
+      'isRunning': stateMap.game.status === 'Running',
+      'isWinner': stateMap.game.winner == Game.player(),
+    }));
 
-        if (color !== '') {
-          _getField(row, col).find('.chip').attr('data-color', color);
-        }
+    stateMap.$board.find('.cell').on('click', function() {
+
+      // Only trigger if game is running
+      if(stateMap.game.status === 'Running') {
+        _placeChip($(this).attr('data-row'), $(this).attr('data-col'));
       }
-    }
+    });
+  }
 
-    stateMap.$board.find('#moving_player').text(stateMap.moving === 1 ? 'White' : 'Black')
+  const _performAction = (action) => {
+    Game.Data.put(`game/${stateMap.gameToken}/${action}`, {
+      player: Game.player(),
+    }).then(res => {
+      _update(res);
+      stateMap.$board.trigger('boardUpdate');
+    }).catch((err) => { 
+      console.log(error);
+      return false
+    });
   }
 
   const _update = (game) => {
-    stateMap.board = JSON.parse(game.board);
-    stateMap.moving = game.moving;
+    stateMap.game = game;
+    stateMap.game.board = JSON.parse(game.board);
+    stateMap.game.actions = JSON.parse(game.actions);
     _updateBoard();
   }
 
-  /**
-   * Get a field by it's row and col
-   * 
-   * @param {int} row 
-   * @param {int} col 
-   */
-  const _getField = (row, col) => {
-    if (row >= 0 && row < configMap.boardSize && 
-        col >= 0 && col < configMap.boardSize) {
-      
-      return stateMap.$board.find(`[data-row=${row}][data-col=${col}]`);
-    }
-    return false;
-  }
-
-  return {
+  return {  
     init: _init,
-    placeChip: _placeChip,
     update: _update,
+    performAction: _performAction
   }
 })();

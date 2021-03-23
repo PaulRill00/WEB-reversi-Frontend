@@ -1,0 +1,12 @@
+<div class="board" style="
+  grid-template-columns: repeat({{size}}, 4rem); 
+  grid-template-rows:    repeat({{size}}, 4rem);
+">
+  {{#each board }}
+    {{#each this }}
+      <div class="cell" data-row="{{@../index}}" data-col="{{@index}}">
+        <div class="chip" data-color="{{this}}"></div>
+      </div>
+    {{/each}}
+  {{/each}}
+</div>

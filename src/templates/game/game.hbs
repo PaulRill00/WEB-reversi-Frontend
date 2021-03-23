@@ -1,0 +1,25 @@
+<div id="board">
+
+  <h3 id="game_state">The game is {{game.status}}</h3>
+  {{#if game.winner}}
+    {{#if isWinner}}
+      <h3 id="game_state">You won the game</h3>
+    {{else}}
+      <h3 id="game_state">Your opponent won the game</h3>
+    {{/if}}
+  {{/if}}
+
+  {{> board board=game.board size=size }}
+
+  {{#if isRunning}}
+
+    {{#if isMoving}}
+    <h3 id="moving_player">Your turn ({{game.moving}})</h3>
+    {{else}}
+    <h3 id="moving_player">Waiting for opponent...</h3>
+    {{/if}}
+
+  {{/if}}
+
+  {{> actions actions=game.actions}}
+</div>

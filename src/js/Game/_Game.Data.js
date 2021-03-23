@@ -1,12 +1,13 @@
 Game.Data = (() => {
 
   let stateMap = {
-    'environment': 'development'
+    'environment': 'development',
+    'stateMap': undefined
   };
 
   let configMap = {
     mock: {
-      'api/game/test': {
+      'game/test': {
         "player1Token": "Paul",
         "player2Token": "Player2",
         "description":  "Test game",
@@ -15,22 +16,20 @@ Game.Data = (() => {
         "movingPlayer": "Paul",
         "moving":       1,
         "status":       "Running"}
-    
     },
-    apiKey: "3bedf08fa201acca2754e7fdbc6894f8",
   };
 
   const putMockData = (url, data) => {
     switch (url) {
-      case 'api/game/test/move': {
-        let game = configMap.mock['api/game/test'];
+      case 'game/test/move': {
+        let game = configMap.mock['game/test'];
         let board = JSON.parse(game.board);
 
         if(board[data.row][data.col] === 0) {
           board[data.row][data.col] = data.player;
           
           game.board = JSON.stringify(board);
-          configMap.mock['api/game/test'] = game;
+          configMap.mock['game/test'] = game;
           game.moving = game.moving === 1 ? 2 : 1;
 
           return new Promise((resolve, reject) => {
@@ -64,8 +63,9 @@ Game.Data = (() => {
    * 
    * @param {string} env 
    */
-  const privateInit = (env) => {
+  const privateInit = (env, baseApiUrl) => {
     stateMap.environment = env;
+    stateMap.baseApiUrl = baseApiUrl;
     if(stateMap.environment === undefined)
       throw new Error("No environment specified");
   }
@@ -76,7 +76,12 @@ Game.Data = (() => {
    * @param {string} url 
    */
   const get = (url) => {
-    return (stateMap.environment === 'development') ? getMockData(url) : $.get(url);
+    return (stateMap.environment === 'development') ? getMockData(url) : 
+    $.ajax({
+      type: 'GET',
+      crossDomain: true,
+      url: stateMap.baseApiUrl + url,
+    });
   }
 
   /**
@@ -86,9 +91,11 @@ Game.Data = (() => {
     return (stateMap.environment === 'development') ? 
       putMockData(url, data) : 
       $.ajax({
-        url: url,
+        url: stateMap.baseApiUrl + url,
         type: 'PUT',
         data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
       });
   }
 
