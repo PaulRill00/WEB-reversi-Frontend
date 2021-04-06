@@ -18,17 +18,13 @@
 
   <div id="feedback"></div>
   <div id="board"></div>
+  <div class="chart-container">
+    <canvas id="chart"></canvas>
+  </div>
 <script>
 
 $(() => {  
-  // let feedbackWidget = new FeedbackWidget('feedback');
-  
-  // setTimeout(() => {
-  //   feedbackWidget.show('Mike wil deelnemen aan jouw spel. Geef akkoord.', 'success');
-  // }, 500);
-
-  
-  let board = Game.init('http://localhost:5001/api/', 'YuYvpgf3F2niV7uW', 'b24c36a4-61c5-4f1b-96f7-77b488e7dfcf');
+  let board = Game.init('https://paul.hbo-ict.org/api/api/', 'MCH45PMZyUYs9tBQ', '73fa2a9b-2e5b-4027-9b8c-667afee69226');
 });
 
 </script>

@@ -73,6 +73,8 @@ Game.Board = (() => {
         _placeChip($(this).attr('data-row'), $(this).attr('data-col'));
       }
     });
+
+    Game.Stats.update(stateMap.game.board);
   }
 
   const _performAction = (action) => {

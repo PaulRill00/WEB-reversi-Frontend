@@ -1,6 +1,9 @@
 const Game = (() => {
   
   let configMap = {
+    boardId: 'board',
+    chartId: 'chart',
+    chartRefresh: 100,
   };
 
   let stateMap = {
@@ -12,8 +15,13 @@ const Game = (() => {
     stateMap.player = playerToken;
 
     Game.Data.init('production', baseApiUrl);
-    Game.Board.init('board', gameToken);
-    Game.Model.getGameState(gameToken);
+    Game.Board.init(configMap.boardId, gameToken);
+
+    setTimeout(() => {
+      Game.Model.getGameState(gameToken);
+      Game.Stats.init(configMap.chartId)
+    }, configMap.chartRefresh);
+    
   }
 
   const _getCurrentGameState = () => {
